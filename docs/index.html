@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>仲景问典 · 中医经典 AI 学习工具</title>
+<style>
+  :root{
+    --ink:#1c1c1e; --paper:#f7f4ee; --accent:#9a3b2e; --gold:#b8860b;
+    --card:#fffdf9; --line:#e7e0d4; --muted:#6b6358;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;
+    background:var(--paper); color:var(--ink); line-height:1.65;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{text-decoration:none}
+
+  /* HERO */
+  .hero{
+    background:linear-gradient(160deg,#241c19,#3a2a23 60%,#2c211c);
+    color:#f3ece2; padding:62px 20px 54px; text-align:center;
+  }
+  .hero .brand{
+    font-size:12.5px; letter-spacing:3px; color:#c9b8a4;
+    text-transform:uppercase; margin-bottom:18px;
+  }
+  .hero h1{
+    font-size:46px; letter-spacing:6px; font-weight:700; margin-bottom:14px;
+    background:linear-gradient(90deg,#f0e2cf,#e8c879);
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+  }
+  .hero .tag{
+    color:#d8c9b6; font-size:15.5px; max-width:660px; margin:0 auto 30px;
+  }
+  .cta{display:flex; gap:14px; justify-content:center; flex-wrap:wrap}
+  .btn{
+    padding:13px 26px; border-radius:30px; font-size:15px; font-weight:600;
+    transition:.18s; display:inline-block;
+  }
+  .btn.primary{
+    background:var(--gold); color:#2a1d0c;
+    box-shadow:0 6px 18px rgba(184,134,11,.35);
+  }
+  .btn.primary:hover{transform:translateY(-2px); box-shadow:0 10px 24px rgba(184,134,11,.45)}
+  .btn.ghost{
+    background:transparent; color:#f0e2cf; border:1.5px solid rgba(240,226,207,.5);
+  }
+  .btn.ghost:hover{border-color:var(--gold); color:var(--gold)}
+
+  /* LAYOUT */
+  .wrap{max-width:1040px; margin:0 auto; padding:0 18px}
+  section{padding:54px 0}
+  .sec-h{font-size:24px; text-align:center; margin-bottom:8px; letter-spacing:1px}
+  .sec-sub{text-align:center; color:var(--muted); font-size:14px; margin-bottom:34px}
+
+  /* FEATURES */
+  .grid{display:grid; grid-template-columns:repeat(3,1fr); gap:18px}
+  .card{
+    background:var(--card); border:1px solid var(--line); border-radius:14px;
+    padding:24px 22px; transition:.2s;
+  }
+  .card:hover{transform:translateY(-3px); box-shadow:0 10px 26px rgba(0,0,0,.07)}
+  .card .num{
+    width:30px; height:30px; border-radius:50%; background:var(--accent);
+    color:#fff; font-size:14px; font-weight:700; display:flex;
+    align-items:center; justify-content:center; margin-bottom:14px;
+  }
+  .card h3{font-size:17px; margin-bottom:8px}
+  .card p{font-size:13.5px; color:#4a443c}
+
+  /* DATA STRIP */
+  .data{
+    background:#2c211c; color:#ece2d2; border-radius:16px;
+    padding:30px 26px; text-align:center;
+  }
+  .data .big{font-size:34px; font-weight:700; color:var(--gold); letter-spacing:1px}
+  .data .small{font-size:14px; color:#cdbda8; margin-top:6px}
+
+  /* GET (two channels) */
+  .channels{display:grid; grid-template-columns:1fr 1fr; gap:20px}
+  .chan{
+    border:1px solid var(--line); border-radius:16px; padding:28px 24px;
+    background:var(--card); display:flex; flex-direction:column;
+  }
+  .chan h3{font-size:19px; margin-bottom:6px}
+  .chan .price{color:var(--accent); font-weight:700; font-size:15px; margin-bottom:12px}
+  .chan p{font-size:13.5px; color:#4a443c; flex:1; margin-bottom:18px}
+  .chan .link{
+    align-self:flex-start; color:var(--gold); font-weight:600; font-size:14px;
+    border-bottom:1.5px solid var(--gold); padding-bottom:2px;
+  }
+  .chan .link:hover{opacity:.8}
+
+  /* DISCLAIMER */
+  .disc{
+    background:#fbf6ef; border:1px solid var(--line); border-radius:12px;
+    padding:18px 22px; font-size:12.5px; color:var(--muted); line-height:1.8;
+  }
+  .disc b{color:var(--accent)}
+
+  footer{text-align:center; color:var(--muted); font-size:12px; padding:30px 0 44px}
+
+  @media(max-width:760px){
+    .hero h1{font-size:36px}
+    .grid{grid-template-columns:1fr 1fr}
+    .channels{grid-template-columns:1fr}
+  }
+  @media(max-width:480px){
+    .grid{grid-template-columns:1fr}
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="brand">andrew2king · 硅基起源</div>
+  <h1>仲景问典</h1>
+  <p class="tag">中医经典 AI 学习工具 —— 把《伤寒论》《金匮要略》《素问》《难经》《神农本草经》装进电脑，AI 用仲景口吻讲给你听。</p>
+  <div class="cta">
+    <a class="btn primary" href="https://github.com/andrew2king/zhongjing-wendian" target="_blank">在 GitHub 看开源</a>
+    <a class="btn ghost" href="https://www.goofish.com/search?q=%E4%BB%B2%E6%99%AF%E9%97%AE%E5%85%B8" target="_blank">闲鱼购买桌面版 / 源码版</a>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section>
+    <div class="sec-h">它能做什么</div>
+    <div class="sec-sub">一个装进电脑的「中医经典学习台」，不是诊断工具，是跟医圣请教的桌面对话机。</div>
+    <div class="grid">
+      <div class="card">
+        <div class="num">1</div>
+        <h3>医圣对话</h3>
+        <p>用张仲景的口吻讲解经典条文与方义，像在跟医圣当面请教，配原文出处与免责声明。</p>
+      </div>
+      <div class="card">
+        <div class="num">2</div>
+        <h3>条文速查</h3>
+        <p>2300+ 条五经原文，关键词 + 语义混合检索，秒级定位条文与出处，学习不迷路。</p>
+      </div>
+      <div class="card">
+        <div class="num">3</div>
+        <h3>方剂速查</h3>
+        <p>方剂组成、配伍、出处一键查，想知道某方出自哪条、含哪些药，立刻呈现。</p>
+      </div>
+      <div class="card">
+        <div class="num">4</div>
+        <h3>一键本机运行</h3>
+        <p>不联网、不花钱、不上传，本机 Ollama + bge-m3 即可跑通讲解与语义检索。</p>
+      </div>
+      <div class="card">
+        <div class="num">5</div>
+        <h3>10 家大模型自选</h3>
+        <p>DeepSeek / 混元 / 通义 / 智谱 / 硅基流动 / Kimi / 火山 / OpenAI / Ollama / 自定义，密钥你填。</p>
+      </div>
+      <div class="card">
+        <div class="num">6</div>
+        <h3>双击即用</h3>
+        <p>Windows 桌面版解压即开；源码版含后台与 10 家模型接入，开发者可二开。</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="data">
+      <div class="big">五经 2300+ 条</div>
+      <div class="small">伤寒论 · 金匮要略 · 素问 · 难经 · 神农本草经 —— 已清洗结构化原文，零损坏</div>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-h">两种获取方式</div>
+    <div class="sec-sub">免费拿数据框架，或付费拿成品 —— 按你需要来。</div>
+    <div class="channels">
+      <div class="chan">
+        <h3>免费开源</h3>
+        <div class="price">¥0 · GitHub</div>
+        <p>五经原文数据集 + 本地 RAG 框架 local-rag-kit，开发者可直接二开做任何领域的本地知识问答。含关键词检索、可选语义、合规护栏。</p>
+        <a class="link" href="https://github.com/andrew2king/zhongjing-wendian" target="_blank">前往 GitHub 仓库 →</a>
+      </div>
+      <div class="chan">
+        <h3>付费成品</h3>
+        <div class="price">桌面版 / 源码版 · 闲鱼</div>
+        <p>Windows 桌面版双击即用；源码版含后台管理面板与 10 家大模型接入。适合想直接学、不想自己搭的学习者。</p>
+        <a class="link" href="https://www.goofish.com/search?q=%E4%BB%B2%E6%99%AF%E9%97%AE%E5%85%B8" target="_blank">闲鱼搜索「仲景问典」→</a>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="disc">
+      <b>合规声明：</b>仲景问典仅用于中医经典学习，<b>不诊断、不开方、不推荐具体用药</b>。
+      内容来自公开古籍整理，仅供学习参考，不构成任何医疗建议。使用本工具即表示你已知悉并同意此声明。
+    </div>
+  </section>
+
+</main>
+
+<footer>andrew2king · 硅基起源 · 仲景问典 · 部署于 GitHub Pages</footer>
+
+</body>
+</html>
