@@ -1,0 +1,12 @@
+__pycache__/
+*.pyc
+*.db
+config.json
+embed_cache.json
+.env
+*.exe
+build/
+dist/
+启动日志.txt
+.DS_Store
+*.log

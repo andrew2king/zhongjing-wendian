@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>仲景问典 · 本地开源版</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: "Microsoft YaHei","PingFang SC",sans-serif; background: #f3ece0; color: #2a2018; }
+  .wrap { max-width: 960px; margin: 0 auto; padding: 18px; min-height: 100vh; display: flex; flex-direction: column; }
+  .brand { display: flex; align-items: center; gap: 12px; padding-bottom: 12px; border-bottom: 2px solid #d9c7a8; }
+  .seal { width: 44px; height: 44px; border-radius: 10px; background: linear-gradient(145deg,#b8472f,#7d2a1c);
+    color: #ffe9c7; font-size: 26px; font-weight: 900; display: flex; align-items: center; justify-content: center; }
+  .brand h1 { font-size: 22px; letter-spacing: 2px; }
+  .brand .sub { font-size: 13px; color: #8a6d4a; }
+  .tabs { display: flex; gap: 8px; margin: 14px 0; }
+  .tab { flex: 1; padding: 10px; text-align: center; background: #e7dcc6; border-radius: 10px; cursor: pointer; font-size: 15px; }
+  .tab.on { background: #b8472f; color: #fff; }
+  .panel { display: none; flex: 1; flex-direction: column; }
+  .panel.on { display: flex; }
+  .chatbox { flex: 1; overflow-y: auto; background: #fbf6ec; border: 1px solid #e4d6bf; border-radius: 12px; padding: 14px; margin-bottom: 10px; min-height: 320px; }
+  .msg { margin-bottom: 12px; line-height: 1.6; }
+  .msg.bot { color: #5a3a25; }
+  .msg.bot b { color: #b8472f; }
+  .msg.user { text-align: right; color: #1f4d6b; }
+  .row { display: flex; gap: 8px; }
+  .row input { flex: 1; padding: 11px 14px; border: 1px solid #d9c7a8; border-radius: 10px; font-size: 15px; }
+  .btn { padding: 11px 18px; background: #b8472f; color: #fff; border: none; border-radius: 10px; font-size: 15px; cursor: pointer; }
+  .list { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
+  .card { background: #fbf6ec; border: 1px solid #e4d6bf; border-left: 4px solid #b8472f; border-radius: 10px; padding: 12px 14px; }
+  .card .meta { font-size: 12px; color: #8a6d4a; margin-bottom: 4px; }
+  .card .txt { line-height: 1.6; }
+  .hint { font-size: 13px; color: #8a6d4a; text-align: center; padding: 20px; }
+  .disc { margin-top: 12px; font-size: 12px; color: #9a8a72; text-align: center; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="brand">
+    <div class="seal">仲</div>
+    <div><div class="h1">仲景问典</div><div class="sub">本地开源版 · 中医经典 AI 学习</div></div>
+  </div>
+  <div class="tabs">
+    <div class="tab on" data-p="chat">医圣对话</div>
+    <div class="tab" data-p="verse">条文速查</div>
+    <div class="tab" data-p="formula">方剂速查</div>
+  </div>
+
+  <div class="panel on" id="chat">
+    <div class="chatbox" id="chatbox"></div>
+    <div class="row">
+      <input id="q" placeholder="问仲景：如「桂枝汤由哪些药组成？」" onkeydown="if(event.key==='Enter')ask()">
+      <button class="btn" onclick="ask()">问</button>
+    </div>
+  </div>
+
+  <div class="panel" id="verse">
+    <div class="row"><input id="vq" placeholder="检索原文：如「太阳病」「桂枝」"><button class="btn" onclick="searchVerse()">查</button></div>
+    <div class="list" id="vlist" style="margin-top:10px"></div>
+  </div>
+
+  <div class="panel" id="formula">
+    <div class="row"><input id="fq" placeholder="检索方剂：如「桂枝汤」「麻黄」"><button class="btn" onclick="searchFormula()">查</button></div>
+    <div class="list" id="flist" style="margin-top:10px"></div>
+  </div>
+
+  <div class="disc">仅供中医经典学习 · 不诊断 · 不开方 · 不荐药</div>
+</div>
+
+<script>
+const $ = s => document.querySelector(s);
+document.querySelectorAll('.tab').forEach(t => t.onclick = () => {
+  document.querySelectorAll('.tab,.panel').forEach(e => e.classList.remove('on'));
+  t.classList.add('on'); $('#' + t.dataset.p).classList.add('on');
+  if (t.dataset.p === 'formula' && !window._floaded) loadFormulas();
+});
+
+async function ask() {
+  const q = $('#q').value.trim(); if (!q) return;
+  $('#q').value = '';
+  const box = $('#chatbox');
+  box.insertAdjacentHTML('beforeend', `<div class="msg user">${esc(q)}</div>`);
+  box.insertAdjacentHTML('beforeend', `<div class="msg bot" id="tmp">仲景翻阅经典…</div>`);
+  box.scrollTop = box.scrollHeight;
+  try {
+    const s = await fetch('/api/search?q=' + encodeURIComponent(q) + '&k=3').then(r => r.json());
+    const ctx = (s.results || []).map(r => `《${r.book}·${r.chapter}》：${r.text}`).join('\n');
+    const r = await fetch('/api/chat', {method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({messages:[{role:'user', content:q}], context: ctx})}).then(r => r.json());
+    $('#tmp').innerHTML = '<b>仲景</b> ' + esc(r.answer || '（无回答）');
+  } catch (e) {
+    $('#tmp').textContent = '调用失败：' + e;
+  }
+  box.scrollTop = box.scrollHeight;
+}
+
+async function searchVerse() {
+  const q = $('#vq').value.trim(); if (!q) return;
+  const s = await fetch('/api/search?q=' + encodeURIComponent(q) + '&k=10').then(r => r.json());
+  $('#vlist').innerHTML = (s.results || []).map(r =>
+    `<div class="card"><div class="meta">《${r.book}·${r.chapter}》</div><div class="txt">${esc(r.text)}</div></div>`).join('') || '<div class="hint">未命中</div>';
+}
+
+let _formulas = [];
+async function loadFormulas() {
+  _formulas = await fetch('/api/data/formulas').then(r => r.json());
+  window._floaded = true; searchFormula();
+}
+async function searchFormula() {
+  const q = $('#fq').value.trim();
+  const list = (!q ? _formulas : _formulas.filter(f =>
+    (f.name+f.source+f.ingredients+f.indications).includes(q)));
+  $('#flist').innerHTML = (list || []).map(f =>
+    `<div class="card"><div class="meta">${esc(f.name)} · ${esc(f.source||'')}</div>
+     <div class="txt"><b>组成</b>：${esc(f.ingredients||'')}<br><b>主治</b>：${esc(f.indications||'')}${f.note?('<br><b>注</b>：'+esc(f.note)):''}</div></div>`).join('') || '<div class="hint">未命中</div>';
+}
+
+function esc(s){ return (s||'').replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c])); }
+</script>
+</body>
+</html>
