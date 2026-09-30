@@ -3,6 +3,8 @@
 > 中医经典 AI 学习工具的**本地 RAG 开源实现**：把《伤寒论》《金匮要略》《素问》《难经》《神农本草经》
 > 共 2024 条原文装进本地检索，配你自己配置的大模型（本地 Ollama / DeepSeek / 通义 等），
 > 以「仲景」口吻讲经方、查条文、览方剂。**零商业依赖、不内置任何模型与密钥。**
+>
+> 🌐 在线体验（GitHub Pages）：https://andrew2king.github.io/zhongjing-wendian
 
 ## 开源了什么 / 没开源什么
 
@@ -48,7 +50,7 @@ python local_rag.py
 # 浏览器打开 http://127.0.0.1:8000  → 条文/方剂速查直接可用
 
 # 2) 云端大模型（如 DeepSeek）
-LLM_API_KEY=sk-xxxx LLM_MODEL=deepseek-v4-flash python local_rag.py
+LLM_API_KEY=sk-xxxx LLM_MODEL=deepseek-chat python local_rag.py
 
 # 3) 本地 Ollama（零成本、完全离线）
 ollama pull qwen3.8:latest && ollama pull bge-m3
