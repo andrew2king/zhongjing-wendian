@@ -50,7 +50,7 @@ python local_rag.py
 # 浏览器打开 http://127.0.0.1:8000  → 条文/方剂速查直接可用
 
 # 2) 云端大模型（如 DeepSeek）
-LLM_API_KEY=sk-xxxx LLM_MODEL=deepseek-chat python local_rag.py
+LLM_API_KEY=sk-xxxx LLM_MODEL=deepseek-v4-flash python local_rag.py
 
 # 3) 本地 Ollama（零成本、完全离线）
 ollama pull qwen3.8:latest && ollama pull bge-m3
